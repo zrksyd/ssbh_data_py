@@ -24,17 +24,19 @@ for o in mesh.objects:
         v0, v1, v2 = o.vertex_indices[i:i+3]
 
     # Mesh objects have their vertex data stored in various attributes.
-    # If the mesh does not have data for that attribute, the list will be blank. 
+    # If the mesh does not have data for that attribute, the list will be blank.
     # Print the name of the attribute, which will likely be 'Position0' in this case.
     print(o.positions[0].name)
 
-    # The vectors for the attribute data are stored in lists of floats. 
+    # The vectors for the attribute data are stored in lists of floats.
     # The number of elements in each vector depends on the attribute's data type.
     print(o.positions[0].data[0])
 
     # There may be multiple attributes of a given type, so iterate over all of them.
     for normal in o.normals:
         print(normal.name)
+        #How to calculate smooth normals
+        normal.data = ssbh_data_py.mesh_data.calculate_smooth_normals(o.positions[0].data, o.vertex_indices)
 
     # Binormals are used by certain games.
     # For Smash Ultimate, this will be an empty list.
@@ -59,7 +61,7 @@ for o in mesh.objects:
         color_set.data = [[0.5, 0.5, 0.5, a] for [r, g, b, a] in color_set.data]
 
     # Add a new color set attribute with the appropriate number of data elements.
-    # The process is similar for for adding positions, normals, etc. 
+    # The process is similar for for adding positions, normals, etc.
     new_color_set = ssbh_data_py.mesh_data.AttributeData('colorSet3')
     new_color_set.data = [[0.5, 0.5, 0.5, 0.5]] * len(o.positions[0].data)
     o.color_sets.append(new_color_set)
